@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order — uryaesque</title>
+  <link rel="icon" href="logo.gif" type="image/gif">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fff6fa; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .deco-circle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .deco-1 { width: 220px; height: 220px; background: #ffd6e7; opacity: 0.4; top: -70px; right: -50px; }
+    .deco-2 { width: 130px; height: 130px; background: #ffb6c1; opacity: 0.25; bottom: 60px; left: -40px; }
+
+    .card {
+      background: #fff; border: 2px solid #f7c6d8;
+      border-radius: 24px; padding: 2rem 1.8rem;
+      width: 100%; max-width: 460px;
+      position: relative; z-index: 1;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .logo-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.6rem; }
+    .logo-img { width: 65px; height: 65px; border-radius: 50%; border: 2.5px solid #ffb6c1; overflow: hidden; background: #ffd6e7; margin-bottom: 8px; }
+    .logo-img img { width: 100%; height: 100%; object-fit: cover; }
+    .logo-name { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: #c45a8a; font-weight: 700; }
+    .logo-sub { font-size: 0.75rem; color: #d4a0b5; margin-top: 2px; }
+
+    .field { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.72rem; font-weight: 800; color: #c45a8a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+    input[type="text"], input[type="email"], input[type="tel"], select {
+      width: 100%; background: #fff6fa;
+      border: 1.5px solid #f0b8ce; border-radius: 12px;
+      padding: 10px 14px; font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem; color: #5c3d4a; outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: #c45a8a; background: #fff; }
+    select { cursor: pointer; }
+
+    .estimasi-box {
+      display: none; background: #fff0f5;
+      border: 1.5px dashed #f0b8ce; border-radius: 12px;
+      padding: 8px 14px; margin-top: 6px;
+      font-size: 0.78rem; color: #c45a8a; font-weight: 700;
+    }
+
+    .submit-btn {
+      width: 100%; background: #ffb6c1; color: #6b1f3c;
+      border: none; border-radius: 14px; padding: 13px;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 1rem; cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.6rem;
+    }
+    .submit-btn:hover { background: #f79ab5; }
+    .submit-btn:active { transform: scale(0.97); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .notice { font-size: 0.72rem; color: #d4a0b5; text-align: center; margin-top: 1rem; line-height: 1.5; }
+
+    /* SUCCESS */
+    .success {
+      display: none; flex-direction: column;
+      align-items: center; text-align: center; gap: 10px;
+    }
+    .success-icon { font-size: 3rem; }
+    .invoice-card {
+      background: #fff0f5; border: 1.5px solid #f7c6d8;
+      border-radius: 16px; padding: 1.2rem 1.6rem;
+      width: 100%; margin: 0.4rem 0;
+    }
+    .invoice-no {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: #c45a8a; margin-bottom: 4px;
+    }
+    .invoice-sub { font-size: 0.78rem; color: #d4a0b5; margin-bottom: 12px; }
+    .invoice-detail { font-size: 0.82rem; color: #a06080; line-height: 1.7; }
+    .invoice-detail strong { color: #c45a8a; }
+
+    .success-note { font-size: 0.78rem; color: #d4a0b5; line-height: 1.6; }
+
+    /* hearts */
+    .hearts-container { position: fixed; inset: 0; pointer-events: none; overflow: hidden; display: none; z-index: 99; }
+    .heart { position: absolute; bottom: -30px; animation: floatUp 2.2s ease-out forwards; }
+    @keyframes floatUp { to { transform: translateY(-110vh) rotate(20deg); opacity: 0; } }
+  </style>
+</head>
+<body>
+
+<div class="deco-circle deco-1"></div>
+<div class="deco-circle deco-2"></div>
+<div class="hearts-container" id="hearts"></div>
+
+<div class="card">
+  <div class="logo-wrap">
+    <div class="logo-img">
+      <img src="logo.gif" alt="uryaesque" onerror="this.style.display='none';this.parentNode.innerHTML='🌸'">
+    </div>
+    <div class="logo-name">uryaesque</div>
+    <div class="logo-sub">order form ✿</div>
+  </div>
+
+  <div id="form-area">
+    <div class="field">
+      <label for="nama">Nama Lengkap</label>
+      <input type="text" id="nama" placeholder="Nama kamu...">
+    </div>
+    <div class="field">
+      <label for="institusi">Institusi / Asal</label>
+      <input type="text" id="institusi" placeholder="Universitas, perusahaan, dll...">
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="email@example.com">
+    </div>
+    <div class="field">
+      <label for="telp">Nomor Telepon / WhatsApp</label>
+      <input type="tel" id="telp" placeholder="08xxxxxxxxxx">
+    </div>
+    <div class="field">
+      <label for="jasa">Jenis Jasa</label>
+      <select id="jasa" onchange="showEstimasi()">
+        <option value="" disabled selected>Pilih jenis jasa...</option>
+        <option value="poster">🎨 Poster</option>
+        <option value="va">🎙️ Virtual Assistant</option>
+        <option value="translate">🌐 Translate / Localization</option>
+      </select>
+      <div class="estimasi-box" id="estimasi-box"></div>
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="submitOrder()">Kirim Order 🌸</button>
+    <p class="notice">gw bakal hubungi kamu via email/WA setelah order masuk ya~ 💕</p>
+  </div>
+
+  <div class="success" id="success-area">
+    <div class="success-icon">💌</div>
+    <div class="invoice-card">
+      <div class="invoice-no">Invoice #<span id="inv-no"></span></div>
+      <div class="invoice-sub">order berhasil dibuat!</div>
+      <div class="invoice-detail">
+        <strong>Nama:</strong> <span id="inv-nama"></span><br>
+        <strong>Jasa:</strong> <span id="inv-jasa"></span><br>
+        <strong>Estimasi:</strong> <span id="inv-estimasi"></span>
+      </div>
+    </div>
+    <div class="success-note">
+      simpan nomor invoice kamu ya~<br>
+      gw bakal hubungi kamu segera! 🩷
+    </div>
+  </div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuZ_-3kYMkqX8CQ3heJJI35ze072hu_hi6KItCLMezIXXqwKGDzQGBMgJkrirDbpyC6Q/exec';
+
+  const jasaLabel = {
+    'poster': '🎨 Poster',
+    'va': '🎙️ Virtual Assistant',
+    'translate': '🌐 Translate / Localization'
+  };
+
+  const estimasiMap = {
+    'poster': 'Rp 15.000 - 75.000',
+    'va': 'Rp 50.000 - 320.000',
+    'translate': 'Rp 25.000 - 120.000'
+  };
+
+  function showEstimasi() {
+    const jasa = document.getElementById('jasa').value;
+    const box = document.getElementById('estimasi-box');
+    if (jasa && estimasiMap[jasa]) {
+      box.style.display = 'block';
+      box.textContent = '✿ Estimasi: ' + estimasiMap[jasa];
+    } else {
+      box.style.display = 'none';
+    }
+  }
+
+  async function submitOrder() {
+    const nama = document.getElementById('nama').value.trim();
+    const institusi = document.getElementById('institusi').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telp = document.getElementById('telp').value.trim();
+    const jasa = document.getElementById('jasa').value;
+    const btn = document.getElementById('submit-btn');
+
+    if (!nama || !email || !telp || !jasa) {
+      btn.textContent = 'Lengkapi data dulu ya! 🙈';
+      btn.style.background = '#f0b8ce';
+      setTimeout(() => { btn.textContent = 'Kirim Order 🌸'; btn.style.background = ''; }, 2000);
+      return;
+    }
+
+    btn.textContent = 'Mengirim...';
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('nama', nama);
+    formData.append('institusi', institusi);
+    formData.append('email', email);
+    formData.append('telp', telp);
+    formData.append('jasa', jasa);
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: formData });
+      const data = await res.json();
+
+      document.getElementById('inv-no').textContent = data.invoice;
+      document.getElementById('inv-nama').textContent = data.nama;
+      document.getElementById('inv-jasa').textContent = jasaLabel[jasa];
+      document.getElementById('inv-estimasi').textContent = data.estimasi;
+
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('success-area').style.display = 'flex';
+      spawnHearts();
+    } catch (err) {
+      btn.textContent = 'Gagal kirim, coba lagi 😢';
+      btn.style.background = '#f0b8ce';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Kirim Order 🌸'; btn.style.background = ''; }, 3000);
+    }
+  }
+
+  function spawnHearts() {
+    const container = document.getElementById('hearts');
+    container.style.display = 'block';
+    const emojis = ['🩷','💕','✨','🌸','💖','✿'];
+    for (let i = 0; i < 20; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.animationDelay = (Math.random() * 1.2) + 's';
+      h.style.fontSize = (0.9 + Math.random() * 0.9) + 'rem';
+      container.appendChild(h);
+    }
+    setTimeout(() => { container.style.display = 'none'; container.innerHTML = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
