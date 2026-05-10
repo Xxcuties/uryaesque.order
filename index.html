@@ -2,11 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <!-- Flaticon UIcons CSS -->
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order — uryaesque</title>
   <link rel="icon" href="logo.gif" type="image/gif">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
   <style>
+     option i {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Nunito', sans-serif;
@@ -112,28 +120,28 @@
 
   <div id="form-area">
     <div class="field">
-      <label for="nama">Nama Lengkap</label>
+      <label for="nama">FUll name</label>
       <input type="text" id="nama" placeholder="Nama kamu...">
     </div>
     <div class="field">
-      <label for="institusi">Institusi / Asal</label>
-      <input type="text" id="institusi" placeholder="Universitas, perusahaan, dll...">
+      <label for="institusi">institution</label>
+      <input type="text" id="institusi" placeholder="Companies, University, etc.">
     </div>
     <div class="field">
       <label for="email">Email</label>
       <input type="email" id="email" placeholder="email@example.com">
     </div>
     <div class="field">
-      <label for="telp">Nomor Telepon / WhatsApp</label>
+      <label for="telp">Pone numbers / WhatsApp</label>
       <input type="tel" id="telp" placeholder="08xxxxxxxxxx">
     </div>
     <div class="field">
-      <label for="jasa">Jenis Jasa</label>
+      <label for="jasa">services</label>
       <select id="jasa" onchange="showEstimasi()">
-        <option value="" disabled selected>Pilih jenis jasa...</option>
-        <option value="poster">🎨 Poster</option>
-        <option value="va">🎙️ Virtual Assistant</option>
-        <option value="translate">🌐 Translate / Localization</option>
+        <option value="" disabled selected>choose servicer you want to order</option>
+        <option value="poster"><i class="fi fi-br-customize-edit"></i> Poster</option>
+        <option value="va"><i class="fi fi-rr-street-view"></i> Virtual Assistant</option>
+        <option value="translate"><i class="fi fi-sr-language-exchange"></i> Translate / Localization</option>
       </select>
       <div class="estimasi-box" id="estimasi-box"></div>
     </div>
@@ -163,9 +171,9 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuZ_-3kYMkqX8CQ3heJJI35ze072hu_hi6KItCLMezIXXqwKGDzQGBMgJkrirDbpyC6Q/exec';
 
   const jasaLabel = {
-    'poster': '🎨 Poster',
-    'va': '🎙️ Virtual Assistant',
-    'translate': '🌐 Translate / Localization'
+    'poster': 'Poster',
+    'va': 'Virtual Assistant',
+    'translate': 'Translate / Localization'
   };
 
   const estimasiMap = {
