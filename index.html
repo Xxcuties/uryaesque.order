@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Flaticon UIcons CSS -->
-<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
-<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
-<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order — uryaesque</title>
   <link rel="icon" href="logo.gif" type="image/gif">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css">
   <style>
-     option i {
-    margin-right: 6px;
-    vertical-align: middle;
-  }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Nunito', sans-serif;
@@ -61,6 +54,50 @@
       padding: 8px 14px; margin-top: 6px;
       font-size: 0.78rem; color: #c45a8a; font-weight: 700;
     }
+
+    /* Custom dropdown */
+    .custom-select-wrapper { position: relative; }
+    .custom-select-trigger {
+      width: 100%; background: #fff6fa;
+      border: 1.5px solid #f0b8ce; border-radius: 12px;
+      padding: 10px 14px; font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem; color: #a0607a; outline: none;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .custom-select-trigger.placeholder { color: #c4a0b0; }
+    .custom-select-trigger:hover, .custom-select-trigger.open { border-color: #c45a8a; background: #fff; }
+    .custom-select-trigger .arrow {
+      font-size: 0.65rem; color: #d4a0b5;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .custom-select-trigger.open .arrow { transform: rotate(180deg); }
+    .custom-select-trigger .trigger-icon { font-size: 1rem; color: #c45a8a; flex-shrink: 0; }
+
+    .custom-select-dropdown {
+      display: none; position: absolute; top: calc(100% + 6px);
+      left: 0; right: 0; background: #fff;
+      border: 1.5px solid #f0b8ce; border-radius: 12px;
+      overflow: hidden; z-index: 100;
+      box-shadow: 0 8px 24px rgba(196,90,138,0.12);
+      animation: dropIn 0.18s ease;
+    }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .custom-select-dropdown.open { display: block; }
+    .custom-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; font-size: 0.92rem;
+      color: #5c3d4a; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .custom-option:not(:last-child) { border-bottom: 1px solid #fde8f0; }
+    .custom-option:hover { background: #fff0f5; }
+    .custom-option .opt-icon { font-size: 1.05rem; color: #c45a8a; width: 20px; text-align: center; flex-shrink: 0; }
+    .custom-option .opt-label { font-weight: 700; color: #7a3a5a; }
+    .custom-option .opt-sub { font-size: 0.73rem; color: #d4a0b5; margin-top: 1px; }
 
     .submit-btn {
       width: 100%; background: #ffb6c1; color: #6b1f3c;
@@ -120,49 +157,69 @@
 
   <div id="form-area">
     <div class="field">
-      <label for="nama">FUll name</label>
+      <label for="nama">Full Name</label>
       <input type="text" id="nama" placeholder="Your name...">
     </div>
     <div class="field">
-      <label for="institusi">institution</label>
-      <input type="text" id="institusi" placeholder="Companies, University, etc.">
+      <label for="institusi">Institution / Affiliation</label>
+      <input type="text" id="institusi" placeholder="University, company, etc...">
     </div>
     <div class="field">
       <label for="email">Email</label>
-      <input type="email" id="email" placeholder="youremail@gmail.com">
+      <input type="email" id="email" placeholder="email@example.com">
     </div>
     <div class="field">
-      <label for="telp">Pone numbers / WhatsApp</label>
-      <input type="tel" id="telp" placeholder="08xxxxxxxxxx">
+      <label for="telp">Phone / WhatsApp Number</label>
+      <input type="tel" id="telp" placeholder="+1xxxxxxxxxx">
     </div>
     <div class="field">
-      <label for="jasa">services</label>
-      <select id="jasa" onchange="showEstimasi()">
-        <option value="" disabled selected>choose servicer you want to order</option>
-        <option value="poster"><i class="fi fi-br-customize-edit"></i> Poster</option>
-        <option value="va"><i class="fi fi-rr-street-view"></i> Virtual Assistant</option>
-        <option value="translate"><i class="fi fi-sr-language-exchange"></i> Translate / Localization</option>
-      </select>
+      <label>Service Type</label>
+      <div class="custom-select-wrapper" id="jasa-wrapper">
+        <div class="custom-select-trigger placeholder" id="jasa-trigger" onclick="toggleDropdown()">
+          <span id="jasa-trigger-text">Select a service...</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="custom-select-dropdown" id="jasa-dropdown">
+          <div class="custom-option" onclick="selectJasa('poster', '🎨 Poster Design', 'fi fi-br-customize-edit')">
+            <span class="opt-icon"><i class="fi fi-br-customize-edit"></i></span>
+            <div>
+              <div class="opt-label">Poster Design</div>
+            </div>
+          </div>
+          <div class="custom-option" onclick="selectJasa('va', '🎙️ Virtual Assistant', 'fi fi-rr-employee-man')">
+            <span class="opt-icon"><i class="fi fi-rr-employee-man"></i></span>
+            <div>
+              <div class="opt-label">Virtual Assistant</div>
+            </div>
+          </div>
+          <div class="custom-option" onclick="selectJasa('translate', '🌐 Translate / Localization', 'fi fi-sr-language-exchange')">
+            <span class="opt-icon"><i class="fi fi-sr-language-exchange"></i></span>
+            <div>
+              <div class="opt-label">Translate / Localization</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="estimasi-box" id="estimasi-box"></div>
     </div>
-    <button class="submit-btn" id="submit-btn" onclick="submitOrder()">Kirim Order 🌸</button>
-    <p class="notice">gw bakal hubungi kamu via email/WA setelah order masuk ya~ 💕</p>
+    <button class="submit-btn" id="submit-btn" onclick="submitOrder()">Submit Order 🌸</button>
+    <p class="notice">I'll reach out to you via email/WhatsApp once your order comes in~ 💕</p>
   </div>
 
   <div class="success" id="success-area">
     <div class="success-icon">💌</div>
     <div class="invoice-card">
       <div class="invoice-no">Invoice #<span id="inv-no"></span></div>
-      <div class="invoice-sub">order berhasil dibuat!</div>
+      <div class="invoice-sub">order successfully created!</div>
       <div class="invoice-detail">
-        <strong>Nama:</strong> <span id="inv-nama"></span><br>
-        <strong>Jasa:</strong> <span id="inv-jasa"></span><br>
-        <strong>Estimasi:</strong> <span id="inv-estimasi"></span>
+        <strong>Name:</strong> <span id="inv-nama"></span><br>
+        <strong>Service:</strong> <span id="inv-jasa"></span><br>
+        <strong>Estimate:</strong> <span id="inv-estimasi"></span>
       </div>
     </div>
     <div class="success-note">
-      simpan nomor invoice kamu ya~<br>
-      gw bakal hubungi kamu segera! 🩷
+      keep your invoice number safe~<br>
+      I'll get in touch with you soon! 🩷
     </div>
   </div>
 </div>
@@ -171,9 +228,9 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuZ_-3kYMkqX8CQ3heJJI35ze072hu_hi6KItCLMezIXXqwKGDzQGBMgJkrirDbpyC6Q/exec';
 
   const jasaLabel = {
-    'poster': 'Poster',
-    'va': 'Virtual Assistant',
-    'translate': 'Translate / Localization'
+    'poster': '🎨 Poster Design',
+    'va': '🎙️ Virtual Assistant',
+    'translate': '🌐 Translate / Localization'
   };
 
   const estimasiMap = {
@@ -182,33 +239,58 @@
     'translate': 'Rp 25.000 - 120.000'
   };
 
-  function showEstimasi() {
-    const jasa = document.getElementById('jasa').value;
+  let selectedJasa = '';
+
+  function toggleDropdown() {
+    const trigger = document.getElementById('jasa-trigger');
+    const dropdown = document.getElementById('jasa-dropdown');
+    const isOpen = dropdown.classList.contains('open');
+    trigger.classList.toggle('open', !isOpen);
+    dropdown.classList.toggle('open', !isOpen);
+  }
+
+  function selectJasa(value, label, iconClass) {
+    selectedJasa = value;
+    const trigger = document.getElementById('jasa-trigger');
+    trigger.classList.remove('placeholder');
+    trigger.innerHTML = `<span style="display:flex;align-items:center;gap:8px;"><span class="trigger-icon"><i class="${iconClass}"></i></span>${label}</span><span class="arrow">▼</span>`;
+    trigger.classList.remove('open');
+    document.getElementById('jasa-dropdown').classList.remove('open');
+
     const box = document.getElementById('estimasi-box');
-    if (jasa && estimasiMap[jasa]) {
+    if (estimasiMap[value]) {
       box.style.display = 'block';
-      box.textContent = '✿ Estimasi: ' + estimasiMap[jasa];
+      box.textContent = '✿ Estimate: ' + estimasiMap[value];
     } else {
       box.style.display = 'none';
     }
   }
+
+  // close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    const wrapper = document.getElementById('jasa-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      document.getElementById('jasa-trigger').classList.remove('open');
+      document.getElementById('jasa-dropdown').classList.remove('open');
+    }
+  });
 
   async function submitOrder() {
     const nama = document.getElementById('nama').value.trim();
     const institusi = document.getElementById('institusi').value.trim();
     const email = document.getElementById('email').value.trim();
     const telp = document.getElementById('telp').value.trim();
-    const jasa = document.getElementById('jasa').value;
+    const jasa = selectedJasa;
     const btn = document.getElementById('submit-btn');
 
     if (!nama || !email || !telp || !jasa) {
-      btn.textContent = 'Lengkapi data dulu ya! 🙈';
+      btn.textContent = 'Please fill in all fields! 🙈';
       btn.style.background = '#f0b8ce';
-      setTimeout(() => { btn.textContent = 'Kirim Order 🌸'; btn.style.background = ''; }, 2000);
+      setTimeout(() => { btn.textContent = 'Submit Order 🌸'; btn.style.background = ''; }, 2000);
       return;
     }
 
-    btn.textContent = 'Mengirim...';
+    btn.textContent = 'Sending...';
     btn.disabled = true;
 
     const formData = new FormData();
@@ -231,10 +313,10 @@
       document.getElementById('success-area').style.display = 'flex';
       spawnHearts();
     } catch (err) {
-      btn.textContent = 'Gagal kirim, coba lagi 😢';
+      btn.textContent = 'Failed to send, try again 😢';
       btn.style.background = '#f0b8ce';
       btn.disabled = false;
-      setTimeout(() => { btn.textContent = 'Kirim Order 🌸'; btn.style.background = ''; }, 3000);
+      setTimeout(() => { btn.textContent = 'Submit Order 🌸'; btn.style.background = ''; }, 3000);
     }
   }
 
